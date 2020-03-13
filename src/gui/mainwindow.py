@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
         self.set_current_file('')
         self.setUnifiedTitleAndToolBarOnMac(True)
         self.show()
+        self.write_log("Hao Limin's PySpice0.1", 'note')
 
     def create_center_widget(self):
         layout = QVBoxLayout()
@@ -50,6 +51,8 @@ class MainWindow(QMainWindow):
         # Message display
         self.message = QTextEdit()
         self.message.setReadOnly(True)
+        font.setPointSize(15)
+        self.message.setFont(font)
 
         layout.addWidget(self.editor, 5)
         layout.addWidget(self.message, 2)
@@ -159,6 +162,7 @@ class MainWindow(QMainWindow):
         if filename:
             file = QFile(filename)
             if not file.open(QFile.ReadOnly | QFile.Text):
+                self.write_log("Can't open {}".format(filename), 'fail')
                 self.show_critical_dialog("Can't open {}".format(filename))
 
             inf = QTextStream(file)
@@ -168,6 +172,7 @@ class MainWindow(QMainWindow):
 
             self.set_current_file(filename)
             self.statusBar().showMessage("File loaded", 2000)
+            self.write_log("Open {} successfully!".format(filename), "success")
 
     def save(self):
         if self.cur_file:
@@ -183,6 +188,7 @@ class MainWindow(QMainWindow):
     def save_file(self, filename):
         file = QFile(filename)
         if not file.open(QFile.WriteOnly | QFile.Text):
+            self.write_log("Can't open {}".format(filename), 'fail')
             self.show_critical_dialog("Can't open {}".format(filename))
         
         outf = QTextStream(file)
@@ -192,6 +198,7 @@ class MainWindow(QMainWindow):
 
         self.set_current_file(filename)
         self.statusBar().showMessage("File saved", 2000)  
+        self.write_log("Save {} successfully!".format(filename), "success")
 
     def set_current_file(self, filename):
         self.cur_file = filename
@@ -222,10 +229,38 @@ class MainWindow(QMainWindow):
         dlg.show()
 
     """
+    write log to message(QTextEdit)
+    mtype : note   (yellow)
+            success(green)
+            fail   (red)
+    """
+    def write_log(self, msg, mtype = 'note'):
+        color = QColor()
+        if mtype == 'note':
+            color.setRgb(255, 255, 0)
+            msg = '[NOTE]' + msg
+        elif mtype == 'success':
+            color.setRgb(0, 255, 0)
+            msg = '[SUCS]' + msg
+        elif mtype == 'fail':
+            color.setRgb(255, 0, 0)
+            msg = '[FAIL]' + msg
+        else:
+            color.setRgb(255, 255, 0)
+        
+        # add new line to msg.
+        msg += '\n'
+        cursor = self.message.textCursor()
+        fmt = QTextCharFormat()
+        fmt.setForeground(color)
+        cursor.mergeCharFormat(fmt)
+        self.message.mergeCurrentCharFormat(fmt)
+        self.message.insertPlainText(msg)
+
+    """
     Do simulation
     """
     def simulate(self):
         if self.editor.document().isModified():
             self.save() 
         
-        print('simulate')
