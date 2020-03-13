@@ -15,10 +15,14 @@ from PyQt5.QtWidgets      import *
 from PyQt5.QtCore         import *
 from PyQt5.QtPrintSupport import * 
 
+from simulator.simulator  import Simulator
+from define               import status
+
 import os
 import sys
 
 import gui.mainwindow_rc
+
 
 class MainWindow(QMainWindow):
 
@@ -158,12 +162,13 @@ class MainWindow(QMainWindow):
 
     def open_file(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Open file",
-                      "./", "Netlist(*.sp);;Netlist(*.cir);;ALL(*.*)")
+                      "../", "Netlist(*.sp);;Netlist(*.cir);;ALL(*.*)")
         if filename:
             file = QFile(filename)
             if not file.open(QFile.ReadOnly | QFile.Text):
-                self.write_log("Can't open {}".format(filename), 'fail')
-                self.show_critical_dialog("Can't open {}".format(filename))
+                err_msg = "{}: Can't open {}".format(status.ERR_OPEN_FILE, filename)
+                self.write_log(err_msg, 'fail')
+                self.show_critical_dialog(err_msg)
 
             inf = QTextStream(file)
             QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -188,9 +193,10 @@ class MainWindow(QMainWindow):
     def save_file(self, filename):
         file = QFile(filename)
         if not file.open(QFile.WriteOnly | QFile.Text):
-            self.write_log("Can't open {}".format(filename), 'fail')
-            self.show_critical_dialog("Can't open {}".format(filename))
-        
+            err_msg = "{}: Can't open {}".format(status.ERR_OPEN_FILE, filename)
+            self.write_log(err_msg, 'fail')
+            self.show_critical_dialog(err_msg)
+
         outf = QTextStream(file)
         QApplication.setOverrideCursor(Qt.WaitCursor)
         outf << self.editor.toPlainText()
@@ -230,14 +236,15 @@ class MainWindow(QMainWindow):
 
     """
     write log to message(QTextEdit)
-    mtype : note   (yellow)
+    mtype : note   (blue)
             success(green)
             fail   (red)
+            warn   (yellow)
     """
     def write_log(self, msg, mtype = 'note'):
         color = QColor()
         if mtype == 'note':
-            color.setRgb(255, 255, 0)
+            color.setRgb(0, 0, 255)
             msg = '[NOTE]' + msg
         elif mtype == 'success':
             color.setRgb(0, 255, 0)
@@ -245,8 +252,12 @@ class MainWindow(QMainWindow):
         elif mtype == 'fail':
             color.setRgb(255, 0, 0)
             msg = '[FAIL]' + msg
-        else:
+        elif mtype == 'warn':
             color.setRgb(255, 255, 0)
+            msg = '[WARN]' + msg
+        else:
+            color.setRgb(0, 0, 255)
+            msg = '[NOTE]' + msg
         
         # add new line to msg.
         msg += '\n'
@@ -262,5 +273,14 @@ class MainWindow(QMainWindow):
     """
     def simulate(self):
         if self.editor.document().isModified():
-            self.save() 
+            self.save()
+        
+        sim = Simulator(self.cur_file, self.write_log)
+        ret = sim.simulate()
+        if (ret != status.OKAY):
+            err_msg = "{}: Simulate failed ...".format(status.ERR_SIMULATE)
+            self.show_critical_dialog(err_msg)
+            self.write_log(err_msg, 'fail')
+        else:
+            self.write_log("Simulate successfully!", 'success')
         
