@@ -10,8 +10,10 @@
 Status define of PySpice.
 """
 
-OKAY          = 0
-ERR_OPEN_FILE = 1
-ERR_SAVE_FILE = 2
-ERR_SIMULATE  = 3
-ERR_PARSE     = 4
+OKAY                 = 0
+ERR_OPEN_FILE        = 1
+ERR_SAVE_FILE        = 2
+ERR_SIMULATE         = 3
+ERR_PARSE            = 4
+ERR_DEVICE_REDEFINE  = 5
+ERR_NO_MODEL         = 6
