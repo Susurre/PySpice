@@ -119,8 +119,8 @@ class Parser():
             return
         
         name = ret_tuple[0]
-        n1 = Node(ret_tuple[1])
-        n2 = Node(ret_tuple[2])
+        n1 = self.__cktinst.get_add_node(ret_tuple[1])
+        n2 = self.__cktinst.get_add_node(ret_tuple[2])
 
         res = Resistor(name, n1, n2, value)
         self.status_code = self.__cktinst.add_device(res)
@@ -152,8 +152,8 @@ class Parser():
             return
         
         name = ret_tuple[0]
-        n1 = Node(ret_tuple[1])
-        n2 = Node(ret_tuple[2])
+        n1 = self.__cktinst.get_add_node(ret_tuple[1])
+        n2 = self.__cktinst.get_add_node(ret_tuple[2])
 
         cap = Capacitor(name, n1, n2, value)
 
@@ -178,12 +178,63 @@ class Parser():
         ret_tuple = ret.groups()
         fltr = list(filter(utils.filter_None, ret_tuple))
 
+        if len(fltr) < 4:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        name = fltr[0]
+        n1 = self.__cktinst.get_add_node(fltr[1])
+        n2 = self.__cktinst.get_add_node(fltr[2])
+
+        dc_value = None
+        ac_value = None
+        tran_func = None
+        pre_token = ''
+
+        for i in range(3, len(fltr)):
+            token = fltr[i].strip()
+            if token == 'dc':
+                pre_token = 'dc'
+            elif token == 'ac':
+                pre_token = 'ac'
+            elif token == 'tran':
+                pre_token = 'tran'
+            else:
+                if pre_token == '':
+                    if dc_value == None:
+                        self.status_code, dc_value = utils.parse_value(token)
+                    elif ac_value == None:
+                        self.status_code, ac_value = utils.parse_value(token)
+                    elif tran_func == None:
+                        self.status_code, tran_func = utils.parse_tran_func(token)
+
+                elif pre_token == 'dc':
+                    self.status_code, dc_value = utils.parse_value(token)
+                elif pre_token == 'ac':
+                    self.status_code, ac_value = utils.parse_value(token)
+                elif pre_token == 'tran':
+                    self.status_code, tran_func = utils.parse_value(token)
+                
+                pre_token = ''
+            
+            if self.status_code != status.OKAY:
+                self.write(err_msg, 'fail')
+                self.status_code = status.ERR_PARSE
+                return
+            
+        vsrc = Vsrc(name, n1, n2)
+        vsrc.set_dc_value(dc_value)
+        vsrc.set_ac_value(ac_value)
+        vsrc.set_tran_func(tran_func)
+        self.status_code = self.__cktinst.add_device(vsrc)
+
     """
     Current source : Ixxxxx node1 node2 <<DC> value> <<AC> value> <<TRAN> func>
     """
     def __parse_I(self, tokens, lineno):
-        v_pat = r"^(i.*?)\s+(.*?)\s+(.*?)\s+(dc\s+)?(.*?\s+)?(ac\s+)?(.*?\s+)?(tran\s+)?(.*?)?\s*$"
-        ret = re.match(v_pat, tokens, re.I)
+        i_pat = r"^(i.*?)\s+(.*?)\s+(.*?)\s+(dc\s+)?(.*?\s+)?(ac\s+)?(.*?\s+)?(tran\s+)?(.*?)?\s*$"
+        ret = re.match(i_pat, tokens, re.I)
 
         err_msg = "{}: Parse current source failed in line {} ..."\
                   .format(status.ERR_PARSE, lineno)
@@ -196,3 +247,55 @@ class Parser():
         # if not matched, the value is None. filter None
         ret_tuple = ret.groups()
         fltr = list(filter(utils.filter_None, ret_tuple))
+
+        if len(fltr) < 4:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        name = fltr[0]
+        n1 = self.__cktinst.get_add_node(fltr[1])
+        n2 = self.__cktinst.get_add_node(fltr[2])
+
+        dc_value = None
+        ac_value = None
+        tran_func = None
+        pre_token = ''
+
+        for i in range(3, len(fltr)):
+            token = fltr[i].strip()
+            if token == 'dc':
+                pre_token = 'dc'
+            elif token == 'ac':
+                pre_token = 'ac'
+            elif token == 'tran':
+                pre_token = 'tran'
+            else:
+                if pre_token == '':
+                    if dc_value == None:
+                        self.status_code, dc_value = utils.parse_value(token)
+                    elif ac_value == None:
+                        self.status_code, ac_value = utils.parse_value(token)
+                    elif tran_func == None:
+                        self.status_code, tran_func = utils.parse_tran_func(token)
+
+                elif pre_token == 'dc':
+                    self.status_code, dc_value = utils.parse_value(token)
+                elif pre_token == 'ac':
+                    self.status_code, ac_value = utils.parse_value(token)
+                elif pre_token == 'tran':
+                    self.status_code, tran_func = utils.parse_value(token)
+                
+                pre_token = ''
+            
+            if self.status_code != status.OKAY:
+                self.write(err_msg, 'fail')
+                self.status_code = status.ERR_PARSE
+                return
+            
+        isrc = Isrc(name, n1, n2)
+        isrc.set_dc_value(dc_value)
+        isrc.set_ac_value(ac_value)
+        isrc.set_tran_func(tran_func)
+
+        self.status_code = self.__cktinst.add_device(isrc)

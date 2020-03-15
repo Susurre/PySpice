@@ -16,3 +16,9 @@ from device.devicebase import ModelBase
 class CapacitorModel(ModelBase):
     def __init__(self, mtype):
         super(CapacitorModel, self).__init__(mtype)
+    
+    def setup(self):
+        pass
+
+    def load(self):
+        pass

@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
-# Filename : resistor_model.py
+# Filename : isrc_model.py
 # Author   : Hao Limin
-# Date     : 2020-03-14
+# Date     : 2020-03-15
 # Email    : haolimin01@sjtu.edu.cn
 # Python   : 3.7.5
 
 """
-Resistor model, inherit ModelBase.
+Current Source model, inherit ModelBase.
 """
 
 from device.devicebase import ModelBase
 
 
-class ResistorModel(ModelBase):
+class IsrcModel(ModelBase):
     def __init__(self, mtype):
-        super(ResistorModel, self).__init__(mtype)
+        super(IsrcModel, self).__init__(mtype)
     
     def setup(self):
         pass

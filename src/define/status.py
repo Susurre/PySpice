@@ -17,3 +17,4 @@ ERR_SIMULATE         = 3
 ERR_PARSE            = 4
 ERR_DEVICE_REDEFINE  = 5
 ERR_NO_MODEL         = 6
+ERR_ANALYZE          = 7

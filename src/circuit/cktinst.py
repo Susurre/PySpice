@@ -54,12 +54,27 @@ class CktInst():
 
         return status.OKAY
 
-    def get_nodes_items(self):
-        pass
+    """
+    Print all nodes.
+    """
+    def print_all_nodes(self):
+        for node in self.__nodes.values():
+            print(node)
 
-    def get_devices_items(self):
-        pass
-    
+    """
+    Print all devices.
+    """
+    def print_all_devices(self):
+        for device in self.__devices.values():
+            print(device)
+
+    """
+    Print all models.
+    """
+    def print_all_models(self):
+        for model in self.__models.values():
+            print(model)
+
     """
     Return node inst.
     If not exist, create it and add to __nodes.
@@ -87,14 +102,26 @@ class CktInst():
 
         model_dict = {
             const.CAPACITOR_TYPE: CapacitorModel,
-            const.RESISTOR_TYPE : ResistorModel
+            const.ISRC_TYPE     : IsrcModel,
+            const.RESISTOR_TYPE : ResistorModel,
+            const.VSRC_TYPE     : VsrcModel
         }
 
         for mtype, Model in model_dict.items():
             model = Model(mtype)
             self.__models[mtype] = model
 
+    """
+    Setup all device.
+    """
+    def setup(self):
+        pass
 
+    """
+    Load all devices.
+    """
+    def load(self):
+        pass
 
 
 

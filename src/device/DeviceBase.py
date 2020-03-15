@@ -11,6 +11,8 @@ This file defines Node, Branch and DeviceBase.
 DeviceBase will be inherited by other devices.
 """
 
+import abc
+
 
 class Node():
     def __init__(self, name):
@@ -29,6 +31,9 @@ class Node():
     
     def get_name(self):
         return self.__name
+    
+    def __str__(self):
+        return "Node => (name: {}), (number: {})".format(self.__name, self.__number)
 
 
 class Branch():
@@ -48,6 +53,9 @@ class Branch():
     
     def get_name(self):
         return self.__name
+    
+    def __str__(self):
+        return "Branch => (name: {}), (number: {})".format(self.__name, self.__number)
 
 
 """
@@ -64,12 +72,18 @@ class DeviceBase():
     def get_mtype(self):
         return self._mtype
     
+    @abc.abstractmethod
     def setup(self):
         pass
 
+    @abc.abstractmethod
     def load(self):
         pass
 
+    def __str__(self):
+        return "Device => (name: {}), (mtype: {})".format(self._name, self._mtype)
+
+    
 
 """
 mtype : model type
@@ -85,8 +99,18 @@ class ModelBase():
     def add_device(self, device):
         self._device_list.append(device)
     
+    @abc.abstractmethod
     def setup(self):
         pass
 
+    @abc.abstractmethod
     def load(self):
         pass
+
+    def __str__(self):
+        dump_str = "====================\n"
+        dump_str += "Model => (mtype: {})\n".format(self._mtype)
+        for device in self._device_list:
+            dump_str += (str(device) + "\n")
+        dump_str += "===================="
+        return dump_str

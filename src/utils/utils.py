@@ -33,7 +33,7 @@ Unit = {
 Parse value from value_str : number<unit><s/hz/h>
 """
 def parse_value(value_str):
-    pat = r"^([+-]?[0-9]*?\.?[0-9]+(?:e[+-]?[0-9]+)?)([a-z]*)?$"
+    pat = r"^([+-]?[0-9]*\.?[0-9]+(?:e[+-]?[0-9]+)?)([a-z]*)?\s*$"
     ret = re.match(pat, value_str, re.I)
     
     if not ret:
@@ -55,7 +55,7 @@ def parse_value(value_str):
 
 
 def parse_tran_func(func_str):
-    pass
+    return status.OKAY, func_str
 
 
 """
