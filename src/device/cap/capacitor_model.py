@@ -17,8 +17,12 @@ class CapacitorModel(ModelBase):
     def __init__(self, mtype):
         super(CapacitorModel, self).__init__(mtype)
     
-    def setup(self):
-        pass
+    """
+    All capacitor instance(s) setup.
+    """
+    def setup(self, MNA, RHS):
+        for c in self._device_list:
+            c.setup(MNA, RHS)
 
     def load(self):
         pass

@@ -17,8 +17,12 @@ class VsrcModel(ModelBase):
     def __init__(self, mtype):
         super(VsrcModel, self).__init__(mtype)
     
-    def setup(self):
-        pass
+    """
+    All Vsrc instance(s) setup.
+    """
+    def setup(self, MNA, RHS):
+        for v in self._device_list:
+            v.setup(MNA, RHS)
 
     def load(self):
         pass

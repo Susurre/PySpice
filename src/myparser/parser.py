@@ -13,6 +13,7 @@ write: function.
 """
 
 from define import status
+from define import const
 from utils import utils
 
 from device.devices import *
@@ -70,12 +71,20 @@ class Parser():
         finally:
             fp.close()
     
+    """
+    Get all the parsed analysis task(s).
+    """
+    def get_analysis_task(self):
+        return self.__analysis_task
+
+    """
+    Parse all the netlist lines.
+    """
     def parse(self):
         self.__read_file()
         if self.status_code != status.OKAY:
             self.write("{}: Parse failed ...".format(status.ERR_PARSE), 'fail')
             return status.ERR_PARSE
-        last_line = ''
         for lineno, line in self.__content.items():
             if line.startswith('r'):
                 self.__parse_R(line, lineno)
@@ -87,14 +96,17 @@ class Parser():
                 self.__parse_V(line, lineno)
             elif line.startswith('i'):
                 self.__parse_I(line, lineno)
-            elif line.startswith('.'):
-                last_line = line
+            elif line.startswith('.dc'):
+                self.__parse_dc(line, lineno)
+            elif line.startswith('.ac'):
+                self.__parse_ac(line, lineno)
             else:
                 self.write("Ignore line: {}".format(lineno), 'warn')
 
             if self.status_code != status.OKAY:
                 return status.ERR_PARSE
-            
+        
+        self.__cktinst.finish_parsing()
         return status.OKAY
     
     """
@@ -303,3 +315,92 @@ class Parser():
         isrc.set_tran_func(tran_func)
 
         self.status_code = self.__cktinst.add_device(isrc)
+
+    """
+    DC analysis line : .dc src1 start1 stop1 incr1
+    We do not need to save (.dc), so length is 4.
+    """
+    def __parse_dc(self, tokens, lineno):
+        dc_pat = r"^\.dc\s+(.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s*$"
+        ret = re.match(dc_pat, tokens, re.I)
+        err_msg = "{}: Parse DC analysis failed in line {} ...".format(status.ERR_PARSE, lineno)
+        if not ret:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret_tuple = ret.groups()
+        if len(ret_tuple) != 4:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        src1 = ret_tuple[0]
+        ret, start1 = utils.parse_value(ret_tuple[1])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        ret, stop1 = utils.parse_value(ret_tuple[2])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        ret, incr1 = utils.parse_value(ret_tuple[3])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        dc = DCAnalysis(const.DC_ANA_TYPE)
+        dc.set_arg1(src1, start1, stop1, incr1)
+        self.__analysis_task += [dc]
+
+    """
+    AC analysis line : .ac dec/oct/line points fstart fstop
+    We do not need to save (.ac), so length is 4.
+    """
+    def __parse_ac(self, tokens, lineno):
+        ac_pat = r"^\.ac\s+(.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s*$"
+        ret = re.match(ac_pat, tokens)
+        err_msg = "{}: Parse AC analysis failed in line {} ...".format(status.ERR_PARSE, lineno)
+        if not ret:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret_tuple = ret.groups()
+        if len(ret_tuple) != 4:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        vtype = ret_tuple[0]
+        if vtype != "dec" and vtype != "oct" and vtype != "line":
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret, points = utils.parse_value(ret_tuple[1])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret, fstart = utils.parse_value(ret_tuple[2])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret, fstop = utils.parse_value(ret_tuple[3])
+        if ret != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ac = ACAnalysis(const.AC_ANA_TYPE)
+        ac.set_arg(vtype, points, fstart, fstop)
+        self.__analysis_task += [ac]
+
+

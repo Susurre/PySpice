@@ -28,6 +28,7 @@ class Simulator():
         self.__filename = filename
         self.write = write
         self.__cktinst = CktInst(self.write)
+        self.__analysis_task = None
 
     def simulate(self):
         self.write("Start simulating ...", 'note')
@@ -40,6 +41,8 @@ class Simulator():
         if __debug__:
             self.__cktinst.print_all_nodes()
             self.__cktinst.print_all_models()
+            for ana in self.__analysis_task:
+                print(ana)
         
         # 2. Analyze
         ret = self.__analyze()
@@ -56,10 +59,23 @@ class Simulator():
 
         if ret != status.OKAY:
             return status.ERR_PARSE
+        
+        self.__analysis_task = parser.get_analysis_task()
 
+        self.write("Parse successfully!", 'success')
         return status.OKAY
 
     def __analyze(self):
+        self.write("Start analyzing", 'note')
+        for ana in self.__analysis_task:
+            ret = ana.do_analysis(self.__cktinst, self.write)
+            
+            if ret != status.OKAY:
+                err_msg = "{}: Analyze failed ..."
+                self.write(err_msg, 'fail')
+                return status.ERR_ANALYZE
+
+        self.write("Analyze successfully!", 'success')
         return status.OKAY
 
     def __export(self):

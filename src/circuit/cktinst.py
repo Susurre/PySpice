@@ -15,6 +15,9 @@ from define import status
 from define import const
 from device.devices import *
 
+from maths.sparse.matrix import Matrix, Vector
+from maths.sparse.solver import Solver
+
 
 class CktInst():
     def __init__(self, write):
@@ -23,6 +26,10 @@ class CktInst():
         self.__devices = {}         # name : Device
         self.__models = {}          # type : Model
         self.__max_number = 0
+
+        self.__MNA = None           # Modified Nodal Matrix : A
+        self.__RHS = None           # Right Hand Side : B
+        self.__Solution = None      # Solution : x
 
         self.__create_models()
     
@@ -53,6 +60,15 @@ class CktInst():
         self.__devices[device_name] = device
 
         return status.OKAY
+
+    """
+    Get device from device name.
+    """
+    def get_device(self, name):
+        if name not in self.__devices:
+            return None
+        else:
+            return self.__devices[name]
 
     """
     Print all nodes.
@@ -112,18 +128,59 @@ class CktInst():
             self.__models[mtype] = model
 
     """
+    Create all branchs, such as inductor, voltage source ...
+    """
+    def __create_branchs(self):
+        size = len(self.__nodes)
+        for d in self.__devices.values():
+            if d.get_mtype() == const.INDUCTOR_TYPE:
+                pass
+            elif d.get_mtype() == const.VSRC_TYPE:
+                branch_name = "{}#branch".format(d.get_name())
+                branch = Branch(branch_name)
+                branch.set_number(size)
+                self.__nodes[branch_name] = branch
+                size += 1
+
+    """
+    Do something after paring.
+    """
+    def finish_parsing(self):
+        self.__create_branchs()
+
+    """
     Setup all device.
     """
-    def setup(self):
-        pass
+    def setup(self, dtype):
+
+        size = len(self.__nodes)
+
+        self.__MNA = Matrix(size, dtype)
+        self.__RHS = Vector(size, dtype)
+
+        for model in self.__models.values():
+            model.setup(self.__MNA, self.__RHS)
+        
+        if __debug__:
+            print("After setup operation:")
+            self.__MNA.print_to_screen()
+            self.__MNA.print_to_screen()
 
     """
     Load all devices.
     """
     def load(self):
-        pass
+        for model in self.__models.values():
+            model.load()
 
-
+    """
+    Reset MNA, RHS
+    """
+    def reset(self):
+        if self.__MNA:
+            self.__MNA.clear()
+        if self.__RHS:
+            self.__RHS.clear()
 
         
 

@@ -23,6 +23,8 @@ class ACAnalysis(Analysis):
         self.__points = 0
         self.__fstart = 0
         self.__fstop = 0
+
+        self.write = None
     
     def set_arg(self, vtype, points, fstart, fstop):
         self.set_vtype(vtype)
@@ -36,5 +38,10 @@ class ACAnalysis(Analysis):
         else:
             self.__vtype = vtype
     
-    def do_analysis(self):
+    def do_analysis(self, cktinst, write):
         pass
+
+    def __str__(self):
+        line = "AC Analysis => (vtype: {}), (points: {}), (fstart: {}), (fstop: {})"\
+               .format(self.__vtype, self.__points, self.__fstart, self.__fstop)
+        return line

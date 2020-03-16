@@ -34,3 +34,9 @@ class Vsrc(DeviceBase):
     
     def set_tran_func(self, tran_func):
         self.__tran_func = tran_func
+    
+    def setup(self, MNA, RHS):
+        pass
+
+    def load(self):
+        pass

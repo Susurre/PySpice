@@ -25,7 +25,7 @@ class Analysis():
         self._atype = atype
     
     @abc.abstractmethod
-    def do_analysis(self):
+    def do_analysis(self, cktinst, write):
         pass
 
     def __str__(self):

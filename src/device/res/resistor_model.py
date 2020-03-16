@@ -17,8 +17,13 @@ class ResistorModel(ModelBase):
     def __init__(self, mtype):
         super(ResistorModel, self).__init__(mtype)
     
-    def setup(self):
-        pass
+    """
+    All resiiistor instance(s) setup.
+    """
+    def setup(self, MNA, RHS):
+        for r in self._device_list:
+            r.setup(MNA, RHS)
+        
 
     def load(self):
         pass

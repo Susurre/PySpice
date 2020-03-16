@@ -73,7 +73,7 @@ class DeviceBase():
         return self._mtype
     
     @abc.abstractmethod
-    def setup(self):
+    def setup(self, MNA, RHS):
         pass
 
     @abc.abstractmethod

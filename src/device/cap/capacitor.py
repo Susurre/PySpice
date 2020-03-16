@@ -23,7 +23,7 @@ class Capacitor(DeviceBase):
         self.__n2 = n2
         self.__capacitance = capacitance
     
-    def setup(self):
+    def setup(self, MNA, RHS):
         pass
 
     def load(self):

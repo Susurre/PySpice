@@ -77,22 +77,22 @@ class Matrix():
         else:
             width = const.PRINT_COMPLEX_WIDTH
 
-        seps = " " * width
+        print("Modified Nodal Matrix")
 
         # The first line
-        line = seps
+        line = "{0:<{1}s}".format("index", width)
         for i in range(self.__size):
-            line += "{0:{1}d}".format(i, width)
+            line += "{0:<{1}d}".format(i, width)
         print(line)
 
         # Print every row.
         for i in range(self.__size):
-            line = "{0:{1}d}".format(i, width)
+            line = "{0:<{1}d}".format(i, width)
             for j in range(self.__size):
                 if self.__dtype == 'float':
-                    line += "{0:{1}.2f}".format(self.get_value(i, j), width)
+                    line += "{0:<{1}.2f}".format(self.get_value(i, j), width)
                 else:
-                    line += "{0.real:{1}.2f}{0.imag:{1}.2f}j".format(self.get_value(i, j), width)
+                    line += "{0.real:<{1}.2f}{0.imag:<{1}.2f}j".format(self.get_value(i, j), width)
             print(line)
 
     def dump_to_file(self):
@@ -154,19 +154,21 @@ class Vector():
         else:
             width = const.PRINT_COMPLEX_WIDTH
         
-        seps = " " * width
+        print("Right Hand Side")
 
         # The first line.
-        line = seps
-        line += "{0:{1}d}".format(0, width)
+        line = "{0:<{1}s}".format("index", width)
+        line += "{0:<{1}d}".format(0, width)
+        print(line)
         
         # Print every row.
         for i in range(self.__size):
-            line = "{0:{1}d}".format(i, width)
+            line = "{0:<{1}d}".format(i, width)
             if self.__dtype == 'float':
-                line += "{0:{1}.2f}".format(self.get_value(i), width)
+                line += "{0:<{1}.2f}".format(self.get_value(i), width)
             else:
-                line += "{0.real:{1}.2f}{0.imag:{1}.2f}j".format(self.get_value(i), width)
-
+                line += "{0.real:<{1}.2f}{0.imag:<{1}.2f}j".format(self.get_value(i), width)
+            print(line)
+            
     def dump_to_file(self):
         pass

@@ -23,7 +23,7 @@ class Resistor(DeviceBase):
         self.__n2 = n2
         self.__resistance = resistance
 
-    def setup(self):
+    def setup(self, MNA, RHS):
         pass
 
     def load(self):
