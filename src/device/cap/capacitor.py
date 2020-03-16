@@ -10,7 +10,7 @@
 Capacitor instance, inherit DeviceBase.
 """
 
-from device.devicebase import DeviceBase
+from device.base import DeviceBase
 from define import const
 
 

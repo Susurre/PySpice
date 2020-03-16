@@ -11,7 +11,7 @@ import all devices and Node, Branch
 """
 
 
-from device.devicebase import Node, Branch
+from device.base import Node, Branch
 from device.cap.capacitor import Capacitor
 from device.cap.capacitor_model import CapacitorModel
 from device.isrc.isrc import Isrc

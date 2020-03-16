@@ -17,8 +17,11 @@ from utils import utils
 
 from device.devices import *
 from circuit.cktinst import CktInst
+from analysis.dc import DCAnalysis
+from analysis.ac import ACAnalysis
 
 import re
+
 
 class Parser():
     def __init__(self, filename, cktinst, write):
@@ -29,6 +32,7 @@ class Parser():
         self.__content = {}
         self.__title = ''
         self.__cktinst = cktinst
+        self.__analysis_task = []
 
         self.status_code = status.OKAY
 

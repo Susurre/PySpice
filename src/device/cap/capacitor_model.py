@@ -10,7 +10,7 @@
 Capacitor model, inherit ModelBase
 """
 
-from device.devicebase import ModelBase
+from device.base import ModelBase
 
 
 class CapacitorModel(ModelBase):

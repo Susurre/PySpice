@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Filename : devicebase.py
+# Filename : base.py
 # Author   : Hao Limin
 # Date     : 2020-03-13
 # Email    : haolimin01@sjtu.edu.cn
