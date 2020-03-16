@@ -27,3 +27,14 @@ class IsrcModel(ModelBase):
     def load_dc(self, MNA, RHS):
         for i in self._device_list:
             i.load_dc(MNA, RHS)
+
+    """
+    All Isrc(s) setup_ac and load_ac.
+    """
+    def setup_ac(self, MNA, RHS):
+        for i in self._device_list:
+            i.setup_ac(MNA, RHS)
+
+    def load_ac(self, MNA, RHS, freq):
+        for i in self._device_list:
+            i.load_ac(MNA, RHS)

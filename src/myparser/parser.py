@@ -110,7 +110,7 @@ class Parser():
         return status.OKAY
     
     """
-    Resistor line :Rxxxxx node1 node2 value
+    Resistor line : Rxxxxx node1 node2 value
     """
     def __parse_R(self, tokens, lineno):
         r_pat = r"^(r.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s*$"

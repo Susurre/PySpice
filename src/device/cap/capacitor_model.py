@@ -27,3 +27,14 @@ class CapacitorModel(ModelBase):
     def load_dc(self, MNA, RHS):
         for c in self._device_list:
             c.load_dc(MNA, RHS)
+
+    """
+    AC analysis
+    """
+    def setup_ac(self, MNA, RHS):
+        for c in self._device_list:
+            c.setup_ac(MNA, RHS)
+
+    def load_ac(self, MNA, RHS, freq):
+        for c in self._device_list:
+            c.load_ac(MNA, RHS, freq)

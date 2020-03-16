@@ -170,11 +170,35 @@ class CktInst():
         #     self.__RHS.print_to_screen("Right Hand Side")
     
     def setup_ac(self):
-        pass
+        size = len(self.__nodes)
+
+        self.__MNA = Matrix(size, 'complex')
+        self.__RHS = Vector(size, 'complex')
+        self.__solver = Solver(self.__MNA, self.__RHS)
+
+        for model in self.__models.values():
+            model.setup_ac(self.__MNA, self.__RHS)
+        
+        # if __debug__:
+        #     print("After setup_ac operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
 
     def setup_tran(self):
-        pass
+        size = len(self.__nodes)
 
+        self.__MNA = Matrix(size, 'float')
+        self.__RHS = Vector(size, 'float')
+        self.__solver = Solver(self.__MNA, self.__RHS)
+
+        for model in self.__models.values():
+            model.setup_tran(self.__MNA, self.__RHS)
+        
+        # if __debug__:
+        #     print("After setup_tran operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
+        
     """
     Load all devices.
     """
@@ -186,11 +210,21 @@ class CktInst():
         #     self.__MNA.print_to_screen()
         #     self.__RHS.print_to_screen("Right Hand Side")
 
-    def load_ac(self):
-        pass
+    def load_ac(self, freq):
+        for model in self.__models.values():
+            model.load_ac(self.__MNA, self.__RHS, freq)
+        # if __debug__:
+        #     print("After load_ac operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
 
     def load_tran(self):
-        pass
+        for model in self.__models.values():
+            model.load_tran(self.__MNA, self.__RHS)
+        # if __debug__:
+        #     print("After load_tran operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
 
     def solve(self):
         self.__Solution = self.__solver.solve()

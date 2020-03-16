@@ -69,12 +69,35 @@ class Vsrc(DeviceBase):
 
         RHS.add_value(br, dc)
 
-
     def setup_ac(self, MNA, RHS):
         pass
 
-    def load_ac(self, MNA, RHS):
-        pass
+    """
+    MNA:
+            N+      N-      Br
+    N+      0       0       1
+
+    N-      0       0      -1
+
+    Br      1       -1      0
+
+    RHS:
+    N+  0
+    N-  0
+    Br  ac_value
+    """
+    def load_ac(self, MNA, RHS, freq):
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        br  = self.__branch.get_number()
+        ac = self.__ac_value          # mag
+
+        MNA.add_value(pos, br,   1)
+        MNA.add_value(neg, br,  -1)
+        MNA.add_value(br,  pos,  1)
+        MNA.add_value(br,  neg, -1)
+
+        RHS.add_value(br, ac)
 
     def setup_tran(self, MNA, RHS):
         pass

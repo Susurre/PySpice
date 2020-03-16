@@ -59,8 +59,20 @@ class Isrc(DeviceBase):
     def setup_ac(self, MNA, RHS):
         pass
 
-    def load_ac(self, MNA, RHS):
-        pass
+    """
+    Isrc AC analysis stamp rule.
+    RHS:
+    N+  -ac_value
+    N-  +ac_value
+    """
+    def load_ac(self, MNA, RHS, freq):
+        
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        ac  = self.__ac_value             # mag
+
+        RHS.add_value(pos, -ac)
+        RHS.add_value(neg,  ac)
 
     def setup_tran(self, MNA, RHS):
         pass

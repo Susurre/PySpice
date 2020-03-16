@@ -18,7 +18,7 @@ class VsrcModel(ModelBase):
         super(VsrcModel, self).__init__(mtype)
     
     """
-    All Vsrc instance(s) setup.
+    All Vsrc instance(s) setup_dc and load_dc.
     """
     def setup_dc(self, MNA, RHS):
         for v in self._device_list:
@@ -27,3 +27,14 @@ class VsrcModel(ModelBase):
     def load_dc(self, MNA, RHS):
         for v in self._device_list:
             v.load_dc(MNA, RHS)
+
+    """
+    All Vsrc instance(s) setup_dc and load_dc.
+    """
+    def setup_ac(self, MNA, RHS):
+        for v in self._device_list:
+            v.setup_ac(MNA, RHS)
+
+    def load_ac(self, MNA, RHS, freq):
+        for v in self._device_list:
+            v.load_ac(MNA, RHS, freq)

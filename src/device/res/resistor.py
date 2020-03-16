@@ -60,8 +60,23 @@ class Resistor(DeviceBase):
     def setup_ac(self, MNA, RHS):
         pass
 
-    def load_ac(self, MNA, RHS):
-        pass
+    """
+    Resistor's stamp reule.
+    MNA:
+            N+      N-
+    N+     1/r     -1/r
+
+    N-     -1/r     1/r
+    """
+    def load_ac(self, MNA, RHS, freq):
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        cond = self.__conductance
+
+        MNA.add_value(pos, pos, cond);
+        MNA.add_value(pos, neg, -cond);
+        MNA.add_value(neg, pos, -cond);
+        MNA.add_value(neg, neg, cond);
     
     def setup_tran(self, MNA, RHS):
         pass

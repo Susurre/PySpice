@@ -89,7 +89,7 @@ class DeviceBase():
         pass
 
     @abc.abstractmethod
-    def load_ac(self, MNA, RHS):
+    def load_ac(self, MNA, RHS, freq):
         pass
 
     @abc.abstractmethod
@@ -131,7 +131,7 @@ class ModelBase():
         pass
     
     @abc.abstractmethod
-    def load_ac(self, MNA, RHS):
+    def load_ac(self, MNA, RHS, freq):
         pass
 
     @abc.abstractmethod
