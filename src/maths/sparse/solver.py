@@ -47,7 +47,7 @@ class Solver():
         size = self.__A.get_size()
 
         A = self.__A.mat[1:, 1:]
-        B = self.__B.vec[1:, 1:]
+        B = self.__B.vec[1:]
 
         x = np.linalg.solve(A, B)
 

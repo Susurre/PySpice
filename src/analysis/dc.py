@@ -40,7 +40,17 @@ class DCAnalysis(Analysis):
             self.write(err_msg, 'fail')
             return status.ERR_ANALYZE
         
-        cktinst.setup('float')
+        cktinst.setup_dc()
+
+        value = self.__start1
+        while not value > self.__stop1:
+            self.__src1.set_dc_value(value)
+            cktinst.load_dc()
+            cktinst.solve()
+            cktinst.export()
+            cktinst.reset()
+
+            value += self.__incr1
         
         return status.OKAY
 

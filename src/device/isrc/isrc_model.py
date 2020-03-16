@@ -18,11 +18,12 @@ class IsrcModel(ModelBase):
         super(IsrcModel, self).__init__(mtype)
     
     """
-    All Isrc instance(s) setup.
+    All Isrc(s) setup_dc and load_dc.
     """
-    def setup(self, MNA, RHS):
+    def setup_dc(self, MNA, RHS):
         for i in self._device_list:
-            i.setup(MNA, RHS)
+            i.setup_dc(MNA, RHS)
 
-    def load(self):
-        pass
+    def load_dc(self, MNA, RHS):
+        for i in self._device_list:
+            i.load_dc(MNA, RHS)

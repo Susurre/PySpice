@@ -20,10 +20,11 @@ class ResistorModel(ModelBase):
     """
     All resiiistor instance(s) setup.
     """
-    def setup(self, MNA, RHS):
+    def setup_dc(self, MNA, RHS):
         for r in self._device_list:
-            r.setup(MNA, RHS)
+            r.setup_dc(MNA, RHS)
         
 
-    def load(self):
-        pass
+    def load_dc(self, MNA, RHS):
+        for r in self._device_list:
+            r.load_dc(MNA, RHS)

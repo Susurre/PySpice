@@ -135,10 +135,10 @@ class Parser():
             return
         
         name = ret_tuple[0]
-        n1 = self.__cktinst.get_add_node(ret_tuple[1])
-        n2 = self.__cktinst.get_add_node(ret_tuple[2])
+        pos_node = self.__cktinst.get_add_node(ret_tuple[1])
+        neg_node = self.__cktinst.get_add_node(ret_tuple[2])
 
-        res = Resistor(name, n1, n2, value)
+        res = Resistor(name, pos_node, neg_node, value)
         self.status_code = self.__cktinst.add_device(res)
         
     """
@@ -168,10 +168,10 @@ class Parser():
             return
         
         name = ret_tuple[0]
-        n1 = self.__cktinst.get_add_node(ret_tuple[1])
-        n2 = self.__cktinst.get_add_node(ret_tuple[2])
+        pos_node = self.__cktinst.get_add_node(ret_tuple[1])
+        neg_node = self.__cktinst.get_add_node(ret_tuple[2])
 
-        cap = Capacitor(name, n1, n2, value)
+        cap = Capacitor(name, pos_node, neg_node, value)
 
         self.status_code = self.__cktinst.add_device(cap)
     
@@ -200,8 +200,8 @@ class Parser():
             return
         
         name = fltr[0]
-        n1 = self.__cktinst.get_add_node(fltr[1])
-        n2 = self.__cktinst.get_add_node(fltr[2])
+        pos_node = self.__cktinst.get_add_node(fltr[1])
+        neg_node = self.__cktinst.get_add_node(fltr[2])
 
         dc_value = None
         ac_value = None
@@ -239,7 +239,7 @@ class Parser():
                 self.status_code = status.ERR_PARSE
                 return
             
-        vsrc = Vsrc(name, n1, n2)
+        vsrc = Vsrc(name, pos_node, neg_node)
         vsrc.set_dc_value(dc_value)
         vsrc.set_ac_value(ac_value)
         vsrc.set_tran_func(tran_func)
@@ -270,8 +270,8 @@ class Parser():
             return
         
         name = fltr[0]
-        n1 = self.__cktinst.get_add_node(fltr[1])
-        n2 = self.__cktinst.get_add_node(fltr[2])
+        pos_node = self.__cktinst.get_add_node(fltr[1])
+        neg_node = self.__cktinst.get_add_node(fltr[2])
 
         dc_value = None
         ac_value = None
@@ -309,7 +309,7 @@ class Parser():
                 self.status_code = status.ERR_PARSE
                 return
             
-        isrc = Isrc(name, n1, n2)
+        isrc = Isrc(name, pos_node, neg_node)
         isrc.set_dc_value(dc_value)
         isrc.set_ac_value(ac_value)
         isrc.set_tran_func(tran_func)

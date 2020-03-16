@@ -148,13 +148,13 @@ class Vector():
         elif self.__dtype == 'complex':
             self.vec[:] = 0 + 0j
     
-    def print_to_screen(self):
+    def print_to_screen(self, label = "Vector"):
         if self.__dtype == 'float':
             width = const.PRINT_FLOAT_WIDTH
         else:
             width = const.PRINT_COMPLEX_WIDTH
         
-        print("Right Hand Side")
+        print(label)
 
         # The first line.
         line = "{0:<{1}s}".format("index", width)

@@ -30,6 +30,7 @@ class CktInst():
         self.__MNA = None           # Modified Nodal Matrix : A
         self.__RHS = None           # Right Hand Side : B
         self.__Solution = None      # Solution : x
+        self.__solver = None        # Linear solver, solve Ax = B
 
         self.__create_models()
     
@@ -139,6 +140,7 @@ class CktInst():
                 branch_name = "{}#branch".format(d.get_name())
                 branch = Branch(branch_name)
                 branch.set_number(size)
+                d.set_branch(branch)
                 self.__nodes[branch_name] = branch
                 size += 1
 
@@ -151,27 +153,47 @@ class CktInst():
     """
     Setup all device.
     """
-    def setup(self, dtype):
+    def setup_dc(self):
 
         size = len(self.__nodes)
 
-        self.__MNA = Matrix(size, dtype)
-        self.__RHS = Vector(size, dtype)
+        self.__MNA = Matrix(size, 'float')
+        self.__RHS = Vector(size, 'float')
+        self.__solver = Solver(self.__MNA, self.__RHS)
 
         for model in self.__models.values():
-            model.setup(self.__MNA, self.__RHS)
+            model.setup_dc(self.__MNA, self.__RHS)
         
-        if __debug__:
-            print("After setup operation:")
-            self.__MNA.print_to_screen()
-            self.__MNA.print_to_screen()
+        # if __debug__:
+        #     print("After setup_dc operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
+    
+    def setup_ac(self):
+        pass
+
+    def setup_tran(self):
+        pass
 
     """
     Load all devices.
     """
-    def load(self):
+    def load_dc(self):
         for model in self.__models.values():
-            model.load()
+            model.load_dc(self.__MNA, self.__RHS)
+        # if __debug__:
+        #     print("After load_dc operation:")
+        #     self.__MNA.print_to_screen()
+        #     self.__RHS.print_to_screen("Right Hand Side")
+
+    def load_ac(self):
+        pass
+
+    def load_tran(self):
+        pass
+
+    def solve(self):
+        self.__Solution = self.__solver.solve()
 
     """
     Reset MNA, RHS
@@ -182,6 +204,10 @@ class CktInst():
         if self.__RHS:
             self.__RHS.clear()
 
-        
+    """
+    Export simulation result
+    """
+    def export(self):
+        self.__Solution.print_to_screen("Solution")
 
 

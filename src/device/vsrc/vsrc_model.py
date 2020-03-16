@@ -20,9 +20,10 @@ class VsrcModel(ModelBase):
     """
     All Vsrc instance(s) setup.
     """
-    def setup(self, MNA, RHS):
+    def setup_dc(self, MNA, RHS):
         for v in self._device_list:
-            v.setup(MNA, RHS)
+            v.setup_dc(MNA, RHS)
 
-    def load(self):
-        pass
+    def load_dc(self, MNA, RHS):
+        for v in self._device_list:
+            v.load_dc(MNA, RHS)
