@@ -17,8 +17,13 @@ class CapacitorModel(ModelBase):
     def __init__(self, mtype):
         super(CapacitorModel, self).__init__(mtype)
     
-    def setup(self):
-        pass
+    """
+    Capacitor(s) are opened in dc.
+    """
+    def setup_dc(self, MNA, RHS):
+        for c in self._device_list:
+            c.setup_dc(MNA, RHS)
 
-    def load(self):
-        pass
+    def load_dc(self, MNA, RHS):
+        for c in self._device_list:
+            c.load_dc(MNA, RHS)

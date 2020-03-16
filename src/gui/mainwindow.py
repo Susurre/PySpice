@@ -236,7 +236,7 @@ class MainWindow(QMainWindow):
 
     """
     write log to message(QTextEdit)
-    mtype : note   (blue)
+    mtype : note   (white)
             success(green)
             fail   (red)
             warn   (yellow)
@@ -244,7 +244,7 @@ class MainWindow(QMainWindow):
     def write_log(self, msg, mtype = 'note'):
         color = QColor()
         if mtype == 'note':
-            color.setRgb(0, 0, 255)
+            color.setRgb(255, 255, 255)
             msg = '[NOTE]' + msg
         elif mtype == 'success':
             color.setRgb(0, 255, 0)

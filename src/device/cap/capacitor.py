@@ -15,16 +15,28 @@ from define import const
 
 
 class Capacitor(DeviceBase):
-    def __init__(self, name, n1, n2, capacitance):
+    def __init__(self, name, pos_node, neg_node, capacitance):
         super(Capacitor, self).__init__(name)
         
         self._mtype = const.CAPACITOR_TYPE
-        self.__n1 = n1
-        self.__n2 = n2
+        self.__pos_node = pos_node
+        self.__neg_node = neg_node
         self.__capacitance = capacitance
     
-    def setup(self):
+    def setup_dc(self, MNA, RHS):
+        pass
+    
+    def load_dc(self, MNA, RHS):
         pass
 
-    def load(self):
+    def setup_ac(self, MNA, RHS):
+        pass
+
+    def load_ac(self, MNA, RHS):
+        pass
+
+    def setup_tran(self, MNA, RHS):
+        pass
+
+    def load_tran(self, MNA, RHS):
         pass

@@ -73,11 +73,27 @@ class DeviceBase():
         return self._mtype
     
     @abc.abstractmethod
-    def setup(self):
+    def setup_dc(self, MNA, RHS):
         pass
 
     @abc.abstractmethod
-    def load(self):
+    def setup_ac(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def setup_tran(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def load_dc(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def load_ac(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def load_tran(self, MNA, RHS):
         pass
 
     def __str__(self):
@@ -100,11 +116,26 @@ class ModelBase():
         self._device_list.append(device)
     
     @abc.abstractmethod
-    def setup(self):
+    def setup_dc(self, MNA, RHS):
         pass
 
     @abc.abstractmethod
-    def load(self):
+    def setup_ac(self, MNA, RHS):
+        pass
+    @abc.abstractmethod
+    def setup_tran(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def load_dc(self, MNA, RHS):
+        pass
+    
+    @abc.abstractmethod
+    def load_ac(self, MNA, RHS):
+        pass
+
+    @abc.abstractmethod
+    def load_tran(self, MNA, RHS):
         pass
 
     def __str__(self):
