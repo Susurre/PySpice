@@ -106,7 +106,6 @@ class Parser():
             if self.status_code != status.OKAY:
                 return status.ERR_PARSE
         
-        self.__cktinst.finish_parsing()
         return status.OKAY
     
     """
@@ -175,6 +174,40 @@ class Parser():
 
         self.status_code = self.__cktinst.add_device(cap)
     
+    """
+    Inductor line : Lxxxxx node1 node2 value
+    """
+    def __parse_L(self, tokens, lineno):
+        l_pat = r"^(l.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s*$"
+        ret = re.match(l_pat, tokens, re.I)
+
+        err_msg = "{}: Parse inductor failed in line {} ..."\
+                  .format(status.ERR_PARSE, lineno)
+        if not ret:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret_tuple = ret.groups()
+        if len(ret_tuple) != 4:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+
+        error, value = utils.parse_value(ret_tuple[3])
+        if error != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        name = ret_tuple[0]
+        pos_node = self.__cktinst.get_add_node(ret_tuple[1])
+        neg_node = self.__cktinst.get_add_node(ret_tuple[2])
+
+        # cap = Capacitor(name, pos_node, neg_node, value)
+
+        # self.status_code = self.__cktinst.add_device(cap)
+
     """
     Voltage source : Vxxxxx node1 node2 <<DC> value> <<AC> value> <<TRAN> func>
     """

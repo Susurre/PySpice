@@ -21,20 +21,29 @@ from define import const
 
 class Matrix():
     def __init__(self, size, dtype):
-        self.set_size(size)
-        self.set_dtype(dtype)
-        
-        self.mat = np.zeros((self.__size, self.__size), self.__dtype)
+        self.__create(size, dtype)
     
-    def set_size(self, size):
+    def __create(self, size, dtype):
         size = int(size)
         if size <= 0:
             size = 1
-        self.__size = size
+        self.__size = size          # size = max_node_number + 1
+        self.set_dtype(dtype)
+        self.mat = np.zeros((self.__size, self.__size), self.__dtype)
+    
+    def enlarge_matrix(self, size):
+        size = int(size)
+        if (size > self.__size):
+            addition = size - self.__size
+            col_mat = np.zeros((self.__size, addition), dtype=self.__dtype)
+            self.mat = np.column_stack((self.mat, col_mat))
+            row_mat = np.zeros((addition, size), dtype=self.__dtype)
+            self.mat = np.row_stack((self.mat, row_mat))
+            self.__size = size
     
     def get_size(self):
         return self.__size
-    
+
     def set_dtype(self, dtype):
         if dtype != 'float' and dtype != 'complex':
             self.__dtype = 'complex'
@@ -45,14 +54,20 @@ class Matrix():
         return self.__dtype
     
     def set_value(self, row, col, value):
-        assert 0 <= row < self.__size
-        assert 0 <= col < self.__size
+        assert row >= 0
+        assert col >= 0
+        max_index = max(row, col)
+        if max_index >= self.__size:
+            self.enlarge_matrix(max_index + 1)
 
         self.mat[row, col] = value
 
     def add_value(self, row, col, value):
-        assert 0 <= row < self.__size
-        assert 0 <= col < self.__size
+        assert row >= 0
+        assert col >= 0
+        max_index = max(row, col)
+        if max_index >= self.__size:
+            self.enlarge_matrix(max_index + 1)
 
         self.mat[row, col] += value
 
@@ -100,21 +115,26 @@ class Matrix():
 
 class Vector():
     def __init__(self, size, dtype):
-        self.set_size(size)
-        self.set_dtype(dtype)
-        
-        self.vec = np.zeros((self.__size, 1), self.__dtype)
-        self.vec[0, 0] = 0
+        self.__create(size, dtype)
     
-    def set_size(self, size):
+    def __create(self, size, dtype):
         size = int(size)
         if size <= 0:
             size = 1
-        self.__size = size
+        self.__size = size         # size = max_node_number + 1
+        self.set_dtype(dtype)
+        self.vec = np.zeros((self.__size, 1), self.__dtype)
+
+    def enlarge_vector(self, size):
+        if size > self.__size:
+            addition = size - self.__size
+            row_vec = np.zeros((addition, 1), dtype=self.__dtype)
+            self.vec = np.row_stack((self.vec, row_vec))
+            self.__size = size
     
     def get_size(self):
         return self.__size
-    
+
     def set_dtype(self, dtype):
         if dtype != 'float' and dtype != 'complex':
             self.__dtype = 'complex'
@@ -125,12 +145,16 @@ class Vector():
         return self.__dtype
     
     def set_value(self, row, value):
-        assert 0 <= row < self.__size
+        assert row >= 0
+        if row >= self.__size:
+            self.enlarge_vector(row + 1)
 
         self.vec[row, 0] = value
 
     def add_value(self, row, value):
-        assert 0 <= row < self.__size
+        assert row >= 0
+        if row >= self.__size:
+            self.enlarge_vector(row + 1)
 
         self.vec[row, 0] += value
 

@@ -10,7 +10,7 @@
 Voltage Source instance, inherit DeviceBase.
 """
 
-from device.base import DeviceBase
+from device.base import DeviceBase, Branch
 from define import const
 
 
@@ -27,9 +27,6 @@ class Vsrc(DeviceBase):
         self.__branch = None
         self.__tran_func = None
     
-    def set_branch(self, branch):
-        self.__branch = branch
-
     def set_dc_value(self, dc_value):
         self.__dc_value = dc_value
     
@@ -40,7 +37,12 @@ class Vsrc(DeviceBase):
         self.__tran_func = tran_func
     
     def setup_dc(self, MNA, RHS):
-        pass
+        branch = Branch("{}#branch".format(self._name))
+        size = MNA.get_size()       # size = max_node_number + 1
+        branch.set_number(size)
+        MNA.enlarge_matrix(size + 1)
+        RHS.enlarge_vector(size + 1)
+        self.__branch = branch
 
     """
     MNA:
@@ -70,7 +72,12 @@ class Vsrc(DeviceBase):
         RHS.add_value(br, dc)
 
     def setup_ac(self, MNA, RHS):
-        pass
+        branch = Branch("{}#branch".format(self._name))
+        size = MNA.get_size()       # size = max_node_number + 1
+        branch.set_number(size)
+        MNA.enlarge_matrix(size + 1)
+        RHS.enlarge_vector(size + 1)
+        self.__branch = branch
 
     """
     MNA:

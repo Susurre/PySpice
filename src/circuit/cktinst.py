@@ -38,6 +38,12 @@ class CktInst():
         return self.__get_node(node_name)
 
     """
+    Return max number (contains nodes and branchs).
+    """
+    def get_max_number(self):
+        return self.__max_number
+
+    """
     1. If device exists, return ERR_DEVICE_REDIFINE.
     2. Add it to it's model and __devices.
     """
@@ -129,26 +135,10 @@ class CktInst():
             self.__models[mtype] = model
 
     """
-    Create all branchs, such as inductor, voltage source ...
-    """
-    def __create_branchs(self):
-        size = len(self.__nodes)
-        for d in self.__devices.values():
-            if d.get_mtype() == const.INDUCTOR_TYPE:
-                pass
-            elif d.get_mtype() == const.VSRC_TYPE:
-                branch_name = "{}#branch".format(d.get_name())
-                branch = Branch(branch_name)
-                branch.set_number(size)
-                d.set_branch(branch)
-                self.__nodes[branch_name] = branch
-                size += 1
-
-    """
     Do something after paring.
     """
     def finish_parsing(self):
-        self.__create_branchs()
+        pass
 
     """
     Setup all device.
