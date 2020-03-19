@@ -125,7 +125,9 @@ class CktInst():
 
         model_dict = {
             const.CAPACITOR_TYPE: CapacitorModel,
+            const.VCVS_TYPE     : VCVSModel,
             const.ISRC_TYPE     : IsrcModel,
+            const.INDUCTOR_TYPE : InductorModel,
             const.RESISTOR_TYPE : ResistorModel,
             const.VSRC_TYPE     : VsrcModel
         }
