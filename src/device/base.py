@@ -61,7 +61,7 @@ class Branch():
 """
 mtype : model type
 """
-class DeviceBase():
+class DeviceBase(metaclass=abc.ABCMeta):
     def __init__(self, name):
         self._name = name
         self._mtype = None
@@ -93,7 +93,7 @@ class DeviceBase():
         pass
 
     @abc.abstractmethod
-    def load_tran(self, MNA, RHS):
+    def load_tran(self, MNA, RHS, time):
         pass
 
     def __str__(self):
@@ -104,7 +104,7 @@ class DeviceBase():
 """
 mtype : model type
 """
-class ModelBase():
+class ModelBase(metaclass=abc.ABCMeta):
     def __init__(self, mtype):
         self._mtype = mtype
         self._device_list = []
@@ -135,7 +135,7 @@ class ModelBase():
         pass
 
     @abc.abstractmethod
-    def load_tran(self, MNA, RHS):
+    def load_tran(self, MNA, RHS, time):
         pass
 
     def __str__(self):

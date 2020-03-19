@@ -38,3 +38,12 @@ class IsrcModel(ModelBase):
     def load_ac(self, MNA, RHS, freq):
         for i in self._device_list:
             i.load_ac(MNA, RHS)
+    
+    """
+    Tran Analysis
+    """
+    def setup_tran(self, MNA, RHS):
+        pass
+
+    def load_tran(self, MNA, RHS, time):
+        pass

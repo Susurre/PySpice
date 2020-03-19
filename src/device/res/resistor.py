@@ -81,5 +81,5 @@ class Resistor(DeviceBase):
     def setup_tran(self, MNA, RHS):
         pass
 
-    def load_tran(self, MNA, RHS):
+    def load_tran(self, MNA, RHS, time):
         pass
