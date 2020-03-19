@@ -29,29 +29,99 @@ class VCVS(DeviceBase):
         self.__branch = None
     
     def setup(self, MNA, RHS):
-        pass
+        branch = Branch("{}#branch".format(self._name))
+        size = MNA.get_size()    # size = max_node_number + 1
+        branch.set_number(size)
+        MNA.enlarge_matrix(size + 1)
+        RHS.enalreg_vector(size + 1)
+        self.__branch = branch
     
+    """
+    VCVS dc analysis stamp rule.
+    MNA:
+            N+      N-      NC+       NC-       Br
+
+    N+                                          +1
+
+    N-                                          -1
+
+    NC+
+
+    NC-
+
+    Br      +1       -1      -Ek       +Ek
+    """
     def load_dc(self, MNA, RHS):
-        pass
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        pos_ctrl = self.__pos_ctrl_node.get_number()
+        neg_ctrl = self.__neg_ctrl_node.get_number()
+        br = self.__branch.get_number()
+        Ek = self.__value
+
+        MNA.add_value(pos, br, 1)
+        MNA.add_value(neg, br, -1)
+        MNA.add_value(br, pos, 1)
+        MNA.add_value(br, neg, -1)
+        MNA.add_value(br, pos_ctrl, -Ek)
+        MNA.add_value(br, neg_ctrl, Ek)
 
     """
-    VCVS ac analysis rule.
+    VCVS ac analysis stamp rule.
     MNA:
-            N+      N-
-    N+      sc      -sc
+            N+      N-      NC+       NC-       Br
 
-    N-      -sc      sc
+    N+                                          +1
+
+    N-                                          -1
+
+    NC+
+
+    NC-
+
+    Br      +1       -1      -Ek       +Ek
     """
     def load_ac(self, MNA, RHS, freq):
         pos = self.__pos_node.get_number()
         neg = self.__neg_node.get_number()
-        s = 2 * math.pi * freq
-        c = self.__capacitance
+        pos_ctrl = self.__pos_ctrl_node.get_number()
+        neg_ctrl = self.__neg_ctrl_node.get_number()
+        br = self.__branch.get_number()
+        Ek = self.__value
 
-        MNA.add_value(pos, pos,  1j * s * c)
-        MNA.add_value(pos, neg, -1j * s * c)
-        MNA.add_value(neg, pos, -1j * s * c)
-        MNA.add_value(neg, neg,  1j * s * c)
+        MNA.add_value(pos, br, 1)
+        MNA.add_value(neg, br, -1)
+        MNA.add_value(br, pos, 1)
+        MNA.add_value(br, neg, -1)
+        MNA.add_value(br, pos_ctrl, -Ek)
+        MNA.add_value(br, neg_ctrl, Ek)
 
+    """
+    VCVS tran analysis stamp rule.
+    MNA:
+            N+      N-      NC+       NC-       Br
+
+    N+                                          +1
+
+    N-                                          -1
+
+    NC+
+
+    NC-
+
+    Br      +1       -1      -Ek       +Ek
+    """
     def load_tran(self, MNA, RHS, time):
-        pass
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        pos_ctrl = self.__pos_ctrl_node.get_number()
+        neg_ctrl = self.__neg_ctrl_node.get_number()
+        br = self.__branch.get_number()
+        Ek = self.__value
+
+        MNA.add_value(pos, br, 1)
+        MNA.add_value(neg, br, -1)
+        MNA.add_value(br, pos, 1)
+        MNA.add_value(br, neg, -1)
+        MNA.add_value(br, pos_ctrl, -Ek)
+        MNA.add_value(br, neg_ctrl, Ek)

@@ -241,10 +241,8 @@ class Parser():
         pos_ctrl_node = self.__cktinst.get_add_node(ret_tuple[3])
         neg_ctrl_node = self.__cktinst.get_add_node(ret_tuple[4])
 
-
-        # l = Inductor(name, pos_node, neg_node, value)
-        # self.status_code = self.__cktinst.add_device(l)
-        
+        e = VCVS(name, pos_node, neg_node, pos_ctrl_node, neg_ctrl_node, value)
+        self.status_code = self.__cktinst.add_device(e)
 
     """
     Voltage source : Vxxxxx node1 node2 <<DC> value> <<AC> value> <<TRAN> func>
