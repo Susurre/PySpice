@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Filename : vsrc_model.py
+# Filename : vsrcmodel.py
 # Author   : Hao Limin
 # Date     : 2020-03-15
 # Email    : haolimin01@sjtu.edu.cn

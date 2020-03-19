@@ -135,12 +135,6 @@ class CktInst():
             self.__models[mtype] = model
 
     """
-    Do something after paring.
-    """
-    def finish_parsing(self):
-        pass
-
-    """
     Setup all device.
     """
     def setup_dc(self):

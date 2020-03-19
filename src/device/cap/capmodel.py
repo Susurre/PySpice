@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Filename : capacitor_model.py
+# Filename : capmodel.py
 # Author   : Hao Limin
 # Date     : 2020-03-14
 # Email    : haolimin01@sjtu.edu.cn

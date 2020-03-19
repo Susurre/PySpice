@@ -91,7 +91,7 @@ class Parser():
             elif line.startswith('c'):
                 self.__parse_C(line, lineno)
             elif line.startswith('l'):
-                pass
+                self.__parse_L(line, lineno)
             elif line.startswith('v'):
                 self.__parse_V(line, lineno)
             elif line.startswith('i'):
@@ -204,9 +204,8 @@ class Parser():
         pos_node = self.__cktinst.get_add_node(ret_tuple[1])
         neg_node = self.__cktinst.get_add_node(ret_tuple[2])
 
-        # cap = Capacitor(name, pos_node, neg_node, value)
-
-        # self.status_code = self.__cktinst.add_device(cap)
+        l = Inductor(name, pos_node, neg_node, value)
+        self.status_code = self.__cktinst.add_device(l)
 
     """
     Voltage source : Vxxxxx node1 node2 <<DC> value> <<AC> value> <<TRAN> func>

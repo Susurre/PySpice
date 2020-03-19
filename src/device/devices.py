@@ -16,6 +16,8 @@ from device.cap.capacitor import Capacitor
 from device.cap.capmodel import CapacitorModel
 from device.isrc.isrc import Isrc
 from device.isrc.isrcmodel import IsrcModel
+from device.ind.inductor import Inductor
+from device.ind.indmodel import InductorModel
 from device.res.resistor import Resistor
 from device.res.resmodel import ResistorModel
 from device.vsrc.vsrc import Vsrc

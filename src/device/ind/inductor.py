@@ -10,7 +10,7 @@
 Inductor instance, inherit DeviceBase.
 """
 
-from device.base import DeviceBase
+from device.base import DeviceBase, Branch
 from define import const
 
 import math
@@ -27,17 +27,64 @@ class Inductor(DeviceBase):
         self.__branch = None
     
     def setup_dc(self, MNA, RHS):
-        pass
+        branch = Branch("{}#branch".format(self._name))
+        size = MNA.get_size()    # max_node_number + 1
+        branch.set_number(size)
+        MNA.enlarge_matrix(size + 1)
+        RHS.enlarge_vector(size + 1)
+        self.__branch = branch
 
+    """
+    Inductor DC Analysis stamp rule.
+    MNA:
+            N+      N-      Br
+    N+                       1
+
+    N-                      -1
+
+    Br       1       -1      0
+    """
     def load_dc(self, MNA, RHS):
-        pass
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        br  = self.__branch.get_number()
+
+        MNA.add_value(pos, br,   1)
+        MNA.add_value(neg, br,  -1)
+        MNA.add_value(br,  pos,  1)
+        MNA.add_value(br,  neg, -1)
 
     def setup_ac(self, MNA, RHS):
-        pass
+        branch = Branch("{}#branch".format(self._name))
+        size = MNA.get_size()    # max_node_number + 1
+        branch.set_number(size)
+        MNA.enlarge_matrix(size + 1)
+        RHS.enlarge_vector(size + 1)
+        self.__branch = branch
 
+    """
+    Inductor AC Analysis stamp rule.
+    MNA:
+            N+      N-      Br
+    N+                       1
+
+    N-                      -1
+
+    Br       1       -1     -sl
+    """
     def load_ac(self, MNA, RHS, freq):
-        pass
+        pos = self.__pos_node.get_number()
+        neg = self.__neg_node.get_number()
+        br  = self.__branch.get_number()
+        l   = self.__inductance
+        s   = 2 * math.pi * freq
 
+        MNA.add_value(pos, br,   1)
+        MNA.add_value(neg, br,  -1)
+        MNA.add_value(br,  pos,  1)
+        MNA.add_value(br,  neg, -1)
+        MNA.add_value(br,  br,  -s * l)
+        
     def setup_tran(self, MNA, RHS):
         pass
 

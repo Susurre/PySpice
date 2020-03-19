@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Filename : isrc_model.py
+# Filename : isrcmodel.py
 # Author   : Hao Limin
 # Date     : 2020-03-15
 # Email    : haolimin01@sjtu.edu.cn
