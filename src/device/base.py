@@ -73,15 +73,7 @@ class DeviceBase(metaclass=abc.ABCMeta):
         return self._mtype
     
     @abc.abstractmethod
-    def setup_dc(self, MNA, RHS):
-        pass
-
-    @abc.abstractmethod
-    def setup_ac(self, MNA, RHS):
-        pass
-
-    @abc.abstractmethod
-    def setup_tran(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         pass
 
     @abc.abstractmethod
@@ -116,14 +108,7 @@ class ModelBase(metaclass=abc.ABCMeta):
         self._device_list.append(device)
     
     @abc.abstractmethod
-    def setup_dc(self, MNA, RHS):
-        pass
-
-    @abc.abstractmethod
-    def setup_ac(self, MNA, RHS):
-        pass
-    @abc.abstractmethod
-    def setup_tran(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         pass
 
     @abc.abstractmethod

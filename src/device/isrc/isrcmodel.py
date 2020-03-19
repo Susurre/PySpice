@@ -17,24 +17,20 @@ class IsrcModel(ModelBase):
     def __init__(self, mtype):
         super(IsrcModel, self).__init__(mtype)
     
-    """
-    All Isrc(s) setup_dc and load_dc.
-    """
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         for i in self._device_list:
-            i.setup_dc(MNA, RHS)
+            i.setup(MNA, RHS)
 
+    """
+    All Isrc(s) load_dc.
+    """
     def load_dc(self, MNA, RHS):
         for i in self._device_list:
             i.load_dc(MNA, RHS)
 
     """
-    All Isrc(s) setup_ac and load_ac.
+    All Isrc(s) and load_ac.
     """
-    def setup_ac(self, MNA, RHS):
-        for i in self._device_list:
-            i.setup_ac(MNA, RHS)
-
     def load_ac(self, MNA, RHS, freq):
         for i in self._device_list:
             i.load_ac(MNA, RHS)
@@ -42,8 +38,5 @@ class IsrcModel(ModelBase):
     """
     Tran Analysis
     """
-    def setup_tran(self, MNA, RHS):
-        pass
-
     def load_tran(self, MNA, RHS, time):
         pass

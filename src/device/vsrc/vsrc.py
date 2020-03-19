@@ -36,7 +36,7 @@ class Vsrc(DeviceBase):
     def set_tran_func(self, tran_func):
         self.__tran_func = tran_func
     
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         branch = Branch("{}#branch".format(self._name))
         size = MNA.get_size()       # size = max_node_number + 1
         branch.set_number(size)
@@ -71,14 +71,6 @@ class Vsrc(DeviceBase):
 
         RHS.add_value(br, dc)
 
-    def setup_ac(self, MNA, RHS):
-        branch = Branch("{}#branch".format(self._name))
-        size = MNA.get_size()       # size = max_node_number + 1
-        branch.set_number(size)
-        MNA.enlarge_matrix(size + 1)
-        RHS.enlarge_vector(size + 1)
-        self.__branch = branch
-
     """
     MNA:
             N+      N-      Br
@@ -105,9 +97,6 @@ class Vsrc(DeviceBase):
         MNA.add_value(br,  neg, -1)
 
         RHS.add_value(br, ac)
-
-    def setup_tran(self, MNA, RHS):
-        pass
 
     def load_tran(self, MNA, RHS, time):
         pass

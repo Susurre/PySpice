@@ -146,7 +146,7 @@ class CktInst():
         self.__solver = Solver(self.__MNA, self.__RHS)
 
         for model in self.__models.values():
-            model.setup_dc(self.__MNA, self.__RHS)
+            model.setup(self.__MNA, self.__RHS)
         
         # if __debug__:
         #     print("After setup_dc operation:")
@@ -161,7 +161,7 @@ class CktInst():
         self.__solver = Solver(self.__MNA, self.__RHS)
 
         for model in self.__models.values():
-            model.setup_ac(self.__MNA, self.__RHS)
+            model.setup(self.__MNA, self.__RHS)
         
         # if __debug__:
         #     print("After setup_ac operation:")
@@ -176,7 +176,7 @@ class CktInst():
         self.__solver = Solver(self.__MNA, self.__RHS)
 
         for model in self.__models.values():
-            model.setup_tran(self.__MNA, self.__RHS)
+            model.setup(self.__MNA, self.__RHS)
         
         # if __debug__:
         #     print("After setup_tran operation:")

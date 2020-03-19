@@ -26,7 +26,7 @@ class Inductor(DeviceBase):
         self.__inductance = inductance
         self.__branch = None
     
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         branch = Branch("{}#branch".format(self._name))
         size = MNA.get_size()    # max_node_number + 1
         branch.set_number(size)
@@ -54,14 +54,6 @@ class Inductor(DeviceBase):
         MNA.add_value(br,  pos,  1)
         MNA.add_value(br,  neg, -1)
 
-    def setup_ac(self, MNA, RHS):
-        branch = Branch("{}#branch".format(self._name))
-        size = MNA.get_size()    # max_node_number + 1
-        branch.set_number(size)
-        MNA.enlarge_matrix(size + 1)
-        RHS.enlarge_vector(size + 1)
-        self.__branch = branch
-
     """
     Inductor AC Analysis stamp rule.
     MNA:
@@ -85,8 +77,5 @@ class Inductor(DeviceBase):
         MNA.add_value(br,  neg, -1)
         MNA.add_value(br,  br,  -s * l)
         
-    def setup_tran(self, MNA, RHS):
-        pass
-
     def load_tran(self, MNA, RHS, time):
         pass

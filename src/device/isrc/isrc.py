@@ -38,7 +38,7 @@ class Isrc(DeviceBase):
     """
     Do not need to do anything.
     """
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         pass
     
     """
@@ -56,9 +56,6 @@ class Isrc(DeviceBase):
         RHS.add_value(pos, -dc)
         RHS.add_value(neg,  dc)
     
-    def setup_ac(self, MNA, RHS):
-        pass
-
     """
     Isrc AC analysis stamp rule.
     RHS:
@@ -73,9 +70,6 @@ class Isrc(DeviceBase):
 
         RHS.add_value(pos, -ac)
         RHS.add_value(neg,  ac)
-
-    def setup_tran(self, MNA, RHS):
-        pass
 
     def load_tran(self, MNA, RHS, time):
         pass

@@ -17,13 +17,13 @@ class InductorModel(ModelBase):
     def __init__(self, mtype):
         super(InductorModel, self).__init__(mtype)
     
-    """
-    Inductor(s) are opened in dc.
-    """
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         for l in self._device_list:
-            l.setup_dc(MNA, RHS)
+            l.setup(MNA, RHS)
 
+    """
+    Inductor(s) are shorted in dc.
+    """
     def load_dc(self, MNA, RHS):
         for l in self._device_list:
             l.load_dc(MNA, RHS)
@@ -31,10 +31,6 @@ class InductorModel(ModelBase):
     """
     AC analysis
     """
-    def setup_ac(self, MNA, RHS):
-        for l in self._device_list:
-            l.setup_ac(MNA, RHS)
-
     def load_ac(self, MNA, RHS, freq):
         for l in self._device_list:
             l.load_ac(MNA, RHS, freq)
@@ -42,8 +38,5 @@ class InductorModel(ModelBase):
     """
     Tran Analysis
     """
-    def setup_tran(self, MNA, RHS):
-        pass
-
     def load_tran(self, MNA, RHS, time):
         pass

@@ -36,7 +36,7 @@ class Resistor(DeviceBase):
     """
     Do not need to enlage the MNA and RHS.
     """
-    def setup_dc(self, MNA, RHS):
+    def setup(self, MNA, RHS):
         pass
     
     """
@@ -57,9 +57,6 @@ class Resistor(DeviceBase):
         MNA.add_value(neg, pos, -cond);
         MNA.add_value(neg, neg, cond);
     
-    def setup_ac(self, MNA, RHS):
-        pass
-
     """
     Resistor's stamp reule.
     MNA:
@@ -78,8 +75,5 @@ class Resistor(DeviceBase):
         MNA.add_value(neg, pos, -cond);
         MNA.add_value(neg, neg, cond);
     
-    def setup_tran(self, MNA, RHS):
-        pass
-
     def load_tran(self, MNA, RHS, time):
         pass

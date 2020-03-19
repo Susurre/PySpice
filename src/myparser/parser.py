@@ -90,6 +90,8 @@ class Parser():
                 self.__parse_R(line, lineno)
             elif line.startswith('c'):
                 self.__parse_C(line, lineno)
+            elif line.startswith('e'):
+                self.__parse_E(line, lineno)
             elif line.startswith('l'):
                 self.__parse_L(line, lineno)
             elif line.startswith('v'):
@@ -206,6 +208,43 @@ class Parser():
 
         l = Inductor(name, pos_node, neg_node, value)
         self.status_code = self.__cktinst.add_device(l)
+
+    """
+    VCVS line : Exxxxx N+ N- NC+ NC- value
+    """
+    def __parse_E(self, tokens, lineno):
+        e_pat = r"^(e.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s+(.*?)\s*$"
+        ret = re.match(e_pat, tokens, re.I)
+
+        err_msg = "{}: Parse VCVS failed in line {} ..."\
+                  .format(status.ERR_PARSE, lineno)
+        if not ret:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        ret_tuple = ret.groups()
+        if len(ret_tuple) != 6:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+
+        error, value = utils.parse_value(ret_tuple[5])
+        if error != status.OKAY:
+            self.write(err_msg, 'fail')
+            self.status_code = status.ERR_PARSE
+            return
+        
+        name = ret_tuple[0]
+        pos_node = self.__cktinst.get_add_node(ret_tuple[1])
+        neg_node = self.__cktinst.get_add_node(ret_tuple[2])
+        pos_ctrl_node = self.__cktinst.get_add_node(ret_tuple[3])
+        neg_ctrl_node = self.__cktinst.get_add_node(ret_tuple[4])
+
+
+        # l = Inductor(name, pos_node, neg_node, value)
+        # self.status_code = self.__cktinst.add_device(l)
+        
 
     """
     Voltage source : Vxxxxx node1 node2 <<DC> value> <<AC> value> <<TRAN> func>

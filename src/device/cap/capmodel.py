@@ -17,13 +17,13 @@ class CapacitorModel(ModelBase):
     def __init__(self, mtype):
         super(CapacitorModel, self).__init__(mtype)
     
+    def setup(self, MNA, RHS):
+        for c in self._device_list:
+            c.setup(MNA, RHS)
+
     """
     Capacitor(s) are opened in dc.
     """
-    def setup_dc(self, MNA, RHS):
-        for c in self._device_list:
-            c.setup_dc(MNA, RHS)
-
     def load_dc(self, MNA, RHS):
         for c in self._device_list:
             c.load_dc(MNA, RHS)
@@ -31,10 +31,6 @@ class CapacitorModel(ModelBase):
     """
     AC analysis
     """
-    def setup_ac(self, MNA, RHS):
-        for c in self._device_list:
-            c.setup_ac(MNA, RHS)
-
     def load_ac(self, MNA, RHS, freq):
         for c in self._device_list:
             c.load_ac(MNA, RHS, freq)
@@ -42,8 +38,5 @@ class CapacitorModel(ModelBase):
     """
     Tran Analysis
     """
-    def setup_tran(self, MNA, RHS):
-        pass
-
     def load_tran(self, MNA, RHS, time):
         pass

@@ -13,6 +13,7 @@ const number begins at 100.
 
 
 CAPACITOR_TYPE = "c"
+VCVS_TYPE      = "e"
 ISRC_TYPE      = "i"
 INDUCTOR_TYPE  = "l"
 RESISTOR_TYPE  = "r"
